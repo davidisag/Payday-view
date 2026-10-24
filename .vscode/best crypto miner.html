@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Crypto Rewards Demo</title>
+	<style>
+		:root { font-family: system-ui, sans-serif; color: #eaf2ff; background: #0d1321; }
+		body { margin: 0; display: grid; place-items: center; min-height: 100vh; }
+		.card { width: min(92vw, 480px); padding: 2rem; border: 1px solid #293957; border-radius: 18px; background: #151f33; box-shadow: 0 15px 50px #0005; }
+		h1 { margin-top: 0; } .notice { color: #a9b8d1; font-size: .9rem; }
+		.balance { margin: 1.5rem 0; padding: 1.2rem; border-radius: 12px; background: #0e1728; }
+		.amount { font-size: 2.3rem; font-weight: 700; color: #75e6a5; }
+		label { display: block; margin: 1rem 0 .4rem; color: #b9c8df; }
+		input, button { width: 100%; box-sizing: border-box; padding: .8rem; border-radius: 9px; border: 1px solid #405272; font: inherit; }
+		input { color: white; background: #0d1321; } button { margin-top: 1rem; cursor: pointer; color: #07140d; background: #75e6a5; border: 0; font-weight: 700; }
+		button:disabled { cursor: not-allowed; opacity: .55; } #status { min-height: 1.4em; margin-top: 1rem; color: #ffd37a; }
+	</style>
+</head>
+<body>
+	<main class="card">
+		<h1>Crypto Rewards Demo</h1>
+		<p class="notice">Safe UI prototype only — no cryptocurrency is mined, transferred, or withdrawn.</p>
+		<section class="balance">
+			<div>Simulated balance</div>
+			<div class="amount"><span id="balance">0.0000</span> DEMO</div>
+			<small id="rate">Reward simulation paused</small>
+		</section>
+		<label for="wallet">Demo wallet address</label>
+		<input id="wallet" placeholder="0x... (not validated or stored)" autocomplete="off" />
+		<button id="withdraw" disabled>Request demo withdrawal</button>
+		<div id="status" role="status"></div>
+	</main>
+	<script>
+		let balance = 0;
+		const balanceEl = document.querySelector('#balance');
+		const rateEl = document.querySelector('#rate');
+		const walletEl = document.querySelector('#wallet');
+		const withdrawEl = document.querySelector('#withdraw');
+		const statusEl = document.querySelector('#status');
+
+		const timer = setInterval(() => {
+			balance += 0.0001;
+			balanceEl.textContent = balance.toFixed(4);
+			rateEl.textContent = 'Simulated rewards are for UI testing only';
+			withdrawEl.disabled = balance < 0.001 || !walletEl.value.trim();
+		}, 1000);
+
+		walletEl.addEventListener('input', () => {
+			withdrawEl.disabled = balance < 0.001 || !walletEl.value.trim();
+		});
+		withdrawEl.addEventListener('click', () => {
+			statusEl.textContent = 'Demo request recorded locally; no funds were transferred.';
+			clearInterval(timer);
+		});
+	</script>
+</body>
+</html>
